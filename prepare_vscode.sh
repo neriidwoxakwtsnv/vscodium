@@ -32,6 +32,18 @@ for file in ../patches/*.patch; do
   fi
 done
 
+# Apply patches from ../patches/book-dev/*.patch
+for file in ../patches/book-dev/*.patch; do
+  if [[ -f "${file}" ]]; then
+    echo applying patch: "${file}";
+    # grep '^+++' "${file}"  | sed -e 's#+++ [ab]/#./vscode/#' | while read line; do shasum -a 256 "${line}"; done
+    if ! git apply --ignore-whitespace "${file}"; then
+      echo failed to apply patch "${file}" >&2
+      exit 1
+    fi
+  fi
+done
+
 if [[ "${VSCODE_QUALITY}" == "insider" ]]; then
   for file in ../patches/insider/*.patch; do
     if [[ -f "${file}" ]]; then
