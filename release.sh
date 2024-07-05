@@ -16,7 +16,7 @@ if [[ $( gh release view --repo "${ASSETS_REPOSITORY}" "${RELEASE_VERSION}" 2>&1
   echo "Creating release '${RELEASE_VERSION}'"
 
   if [[ "${VSCODE_QUALITY}" == "insider" ]]; then
-    NOTES="update vscode to [${MS_COMMIT}](https://github.com/ruyi-vscodium/vscode/tree/${MS_COMMIT})"
+    NOTES="update vscode to [${MS_COMMIT}](https://github.com/neriidwoxakwtsnv/vscode/tree/${MS_COMMIT})"
     CREATE_OPTIONS=""
   else
     NOTES="update vscode to [${MS_TAG}](https://code.visualstudio.com/updates/v$( echo "${MS_TAG//./_}" | cut -d'_' -f 1,2 ))"
