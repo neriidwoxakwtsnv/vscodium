@@ -26,15 +26,20 @@ if [[ "${VSCODE_ARCH}" == "riscv64" ]]; then
   export VSCODE_ELECTRON_REPO='riscv-forks/electron-riscv-releases'
   export ELECTRON_SKIP_BINARY_DOWNLOAD=1
   export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
-  ELECTRON_VERSION="v29.4.0"
-  # Look for releases here if electron version used by vscode changed
-  # https://github.com/riscv-forks/electron-riscv-releases/releases
-  export VSCODE_ELECTRON_TAG="${ELECTRON_VERSION}.riscv2"
-  echo "7244465fe0c1a6ac6e34fe765a9d90fe0017b1a6d3406fd6b8dd9f5d2c8c9df5 *electron-v29.4.0-linux-riscv64.zip" >> build/checksums/electron.txt 
+  ELECTRON_VERSION="30.4.0"
+  if [[ "${ELECTRON_VERSION}" != "$(yarn config get target)" ]]; then
+    # Fail the pipeline if electron target doesn't match what is used.
+    # Look for releases here if electron version used by vscode changed:
+    # https://github.com/riscv-forks/electron-riscv-releases/releases
+    echo "Electron RISC-V binary version doesn't match target electron version!"
+    exit 1
+  fi
+  export VSCODE_ELECTRON_TAG="v${ELECTRON_VERSION}.riscv1"
+  echo "b391bd6e063c34c31b1048615994fca0a5922d5a6b21d6cee6c4335850791516 *electron-v${ELECTRON_VERSION}-linux-riscv64.zip" >> build/checksums/electron.txt
 fi
 
-if [[ -d "../patches/${OS_NAME}/client/" ]]; then
-  for file in "../patches/${OS_NAME}/client/"*.patch; do
+if [[ -d "../patches/linux/client/" ]]; then
+  for file in "../patches/linux/client/"*.patch; do
     if [[ -f "${file}" ]]; then
       echo applying patch: "${file}";
       if ! git apply --ignore-whitespace "${file}"; then
